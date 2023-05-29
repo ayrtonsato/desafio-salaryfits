@@ -7,7 +7,8 @@
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage",
+    "dev": "nodemon ./src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -21,10 +22,21 @@
   },
   "homepage": "https://github.com/ayrtonsato/desafio-salaryfits#readme",
   "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.1",
     "@types/node": "^20.2.5",
+    "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }
