@@ -1,0 +1,30 @@
+{
+  "name": "desafio-salaryfits",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src/**/*.ts",
+    "format": "eslint src/**/*.ts --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ayrtonsato/desafio-salaryfits.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ayrtonsato/desafio-salaryfits/issues"
+  },
+  "homepage": "https://github.com/ayrtonsato/desafio-salaryfits#readme",
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4"
+  }
+}
