@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  webapp:
+    env_file: ./env/dev.env
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    ports:
+      - ${WEB_PORT:-8080}:${WEB_PORT:-8080}
+    volumes:
+      - ./:/usr/src/app
+  mysql:
+    image: mysql
+    restart: always
+    env_file: ./env/mysql.env
+    environment:
+      LANG: C.UTF-8
+    volumes:
+      - weather-data:/var/lib/mysql
+    command:
+      [
+        'mysqld',
+        '--init-connect="SET NAMES utf8mb4"',
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci',
+      ]
+
+volumes:
+  weather-data:
