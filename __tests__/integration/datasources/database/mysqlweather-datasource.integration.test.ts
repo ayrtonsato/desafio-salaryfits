@@ -1,7 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { IsoCodeCountry } from '../../../../src/entities/iso-code-country';
 import { MySqlWeatherDataSource } from '../../../../src/datasources/database/mysql-weather-datasource';
 import { Weather } from '../../../../src/entities/weather';
+import { latLonToCoordinates } from '../../../../src/datasources/database/helpers/converters';
+import { Forecast } from '../../../../src/entities/forecast';
+import { Coordinates } from '../../../../src/entities/coordinates';
 
 describe('MysqlWeather DataSource Integration Tests', () => {
     const prismaClient = new PrismaClient();
@@ -39,6 +42,51 @@ describe('MysqlWeather DataSource Integration Tests', () => {
             expect(result.feelsLike).toBe(weather.feelsLike);
             expect(result.humidity).toBe(weather.humidity);
             expect(result.temp).toBe(weather.temp);
+        });
+    });
+
+    describe('saveForecast', () => {
+        it('should save forecast into database', async () => {
+            const latLon = await prismaClient.latLon.create({
+                data: {
+                    city: 'Rio de Janeiro',
+                    lat: new Prisma.Decimal(-22.9035),
+                    lon: new Prisma.Decimal(-43.2096),
+                    state: 'RJ',
+                    country: 'BR',
+                    cc_id: 76,
+                },
+                include: {
+                    countryCode: true
+                }
+            });
+            const coordinates = latLonToCoordinates(latLon) as Required<Coordinates>;
+            const weathers = [new Weather({
+                temp: 20.00, feelsLike: 20.00,
+                tempMin: 12.00, tempMax: 21.00,
+                humidity: 22.11, pressure: 32.23,
+                description: 'tempo seco'
+            }), new Weather({
+                temp: 20.00, feelsLike: 20.00,
+                tempMin: 12.00, tempMax: 21.00,
+                humidity: 22.11, pressure: 32.23,
+                description: 'tempo seco'
+            }), new Weather({
+                temp: 20.00, feelsLike: 20.00,
+                tempMin: 12.00, tempMax: 21.00,
+                humidity: 22.11, pressure: 32.23,
+                description: 'tempo seco'
+            })];
+            const forecast = new Forecast({
+                coordinates,
+                weathersForecast: weathers,
+            });
+            const result = await mySqlWeatherDataSource.saveForecast(forecast);
+            expect(result).toHaveProperty('coordinates');
+            expect(result).toHaveProperty('weathersForecast');
+            expect(result).toHaveProperty('id');
+            expect(typeof result.id).toBe('string');
+            expect(result.weathersForecast).toHaveLength(3);
         });
     });
 
