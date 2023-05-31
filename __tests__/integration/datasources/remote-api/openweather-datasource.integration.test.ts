@@ -18,7 +18,8 @@ describe('OpenWeather DataSource Integration Tests', () => {
 
             prismaMock.countryCode.findFirst.mockResolvedValue({ code: 76, country: 'BR' });
 
-            const result = await openWeatherDataSource.fetchCoordinates('São Paulo', 'SP', { code: 76, country: 'BR' });
+            const result = await openWeatherDataSource
+                .fetchCoordinates('São Paulo', 'SP', { code: 76, country: 'BR' });
             expect(result).toStrictEqual(expectedCoordinates);
         });
     });
@@ -37,6 +38,31 @@ describe('OpenWeather DataSource Integration Tests', () => {
             expect(typeof result.pressure).toBe('number');
             expect(typeof result.humidity).toBe('number');
             expect(typeof result.description).toBe('string');
+        });
+    });
+
+    describe('fetchForecast', () => {
+        it('should return a valid Weather[]', async () => {
+            const coordinates = {
+                lat: -23.5506507,
+                lon: -46.6333824,
+            };
+            const result = await openWeatherDataSource.fetchForecast(coordinates.lat, coordinates.lon);
+            expect(result).toHaveLength(24);
+            expect(typeof result[0].temp).toBe('number');
+            expect(typeof result[0].feelsLike).toBe('number');
+            expect(typeof result[0].tempMin).toBe('number');
+            expect(typeof result[0].tempMax).toBe('number');
+            expect(typeof result[0].pressure).toBe('number');
+            expect(typeof result[0].humidity).toBe('number');
+            expect(typeof result[0].description).toBe('string');
+            expect(typeof result[result.length - 1].temp).toBe('number');
+            expect(typeof result[result.length - 1].feelsLike).toBe('number');
+            expect(typeof result[result.length - 1].tempMin).toBe('number');
+            expect(typeof result[result.length - 1].tempMax).toBe('number');
+            expect(typeof result[result.length - 1].pressure).toBe('number');
+            expect(typeof result[result.length - 1].humidity).toBe('number');
+            expect(typeof result[result.length - 1].description).toBe('string');
         });
     });
 
