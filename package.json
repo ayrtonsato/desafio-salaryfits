@@ -9,7 +9,7 @@
     "format": "eslint src/**/*.ts --fix",
     "test": "jest --coverage",
     "deploy:db": "prisma migrate deploy",
-    "deploy:seed": "prisma migrate db seed",
+    "deploy:seed": "prisma db seed",
     "dev": "nodemon ./src/server.ts"
   },
   "repository": {
