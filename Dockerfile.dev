@@ -8,6 +8,10 @@ RUN npm install
 
 COPY . .
 
+RUN npx migrate deploy
+
+RUN npx migrate db seed
+
 EXPOSE 8080
 
 CMD ["npm", "run", "dev"]
