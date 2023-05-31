@@ -23,16 +23,16 @@ export class MySqlWeatherDataSource implements
         if (!result) {
             throw new NotFoundError('Weather Not Found');
         }
-        return new Weather(
-            result.temp.toNumber(),
-            result.feelsLike.toNumber(),
-            result.tempMin.toNumber(),
-            result.tempMax.toNumber(),
-            result.pressure.toNumber(),
-            result.humidity.toNumber(),
-            result.description,
-            result.id,
-        );
+        return new Weather({
+            temp: result.temp.toNumber(),
+            feelsLike: result.feelsLike.toNumber(),
+            tempMin: result.tempMin.toNumber(),
+            tempMax: result.tempMax.toNumber(),
+            pressure: result.pressure.toNumber(),
+            humidity: result.humidity.toNumber(),
+            description: result.description,
+            id: result.id,
+        });
     }
 
     async saveWeather(weather: Weather, coordinatesId: number): Promise<Weather> {
@@ -52,16 +52,16 @@ export class MySqlWeatherDataSource implements
         if (!result) {
             throw new InsertToDatabaseError('Insert weather error');
         }
-        return new Weather(
-            new Prisma.Decimal(result.temp).toNumber(),
-            new Prisma.Decimal(result.feelsLike).toNumber(),
-            new Prisma.Decimal(result.tempMin).toNumber(),
-            new Prisma.Decimal(result.tempMax).toNumber(),
-            new Prisma.Decimal(result.pressure).toNumber(),
-            new Prisma.Decimal(result.humidity).toNumber(),
-            result.description,
-            result.id,
-        );
+        return new Weather({
+            temp: new Prisma.Decimal(result.temp).toNumber(),
+            feelsLike: new Prisma.Decimal(result.feelsLike).toNumber(),
+            tempMin: new Prisma.Decimal(result.tempMin).toNumber(),
+            tempMax: new Prisma.Decimal(result.tempMax).toNumber(),
+            pressure: new Prisma.Decimal(result.pressure).toNumber(),
+            humidity: new Prisma.Decimal(result.humidity).toNumber(),
+            description: result.description,
+            id: result.id,
+        });
     }
 
     async fetchCoordinates(city: string, state: string, isoCodeCountry: IsoCodeCountry): Promise<Coordinates | null> {

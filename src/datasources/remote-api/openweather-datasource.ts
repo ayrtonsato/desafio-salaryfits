@@ -23,15 +23,15 @@ export class OpenWeatherDataSource implements CoordinatesFromAPIRepository, Weat
             if (!data) {
                 throw new NotFoundError('Weather not found!');
             }
-            const weather = new Weather(
-                data.main.temp,
-                data.main.feels_like,
-                data.main.temp_min,
-                data.main.temp_max,
-                data.main.pressure,
-                data.main.humidity,
-                data.weather[0].description,
-            );
+            const weather = new Weather({
+                temp: data.main.temp,
+                feelsLike: data.main.feels_like,
+                tempMin: data.main.temp_min,
+                tempMax: data.main.temp_max,
+                pressure: data.main.pressure,
+                humidity: data.main.humidity,
+                description: data.weather[0].description,
+            });
             return weather;
         } catch (err) {
             if (axios.isAxiosError(err)) {

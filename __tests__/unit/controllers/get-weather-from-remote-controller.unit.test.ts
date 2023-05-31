@@ -19,7 +19,12 @@ const fakeLatLonResult = {
 };
 
 const fakeWeather = new Weather(
-    20.00, 20.00, 12.00, 21.00, 22.11, 32.23, 'tempo seco', 'uuid'
+    {
+        temp: 20.00, feelsLike: 20.00,
+        tempMin: 12.00, tempMax: 21.00,
+        humidity: 22.11, pressure: 32.23,
+        description: 'tempo seco', id: 'uuid'
+    }
 );
 const fakeWeatherDTO = {
     temp: new Prisma.Decimal(20.00),
@@ -31,6 +36,7 @@ const fakeWeatherDTO = {
     description: 'tempo seco',
     latLonId: 10,
     id: 'uuid',
+    forecastId: null
 };
 const mysqlDataSource = new MySqlWeatherDataSource(prismaMock);
 const openWeather = new OpenWeatherDataSource();

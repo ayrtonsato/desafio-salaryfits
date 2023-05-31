@@ -27,15 +27,12 @@ describe('MysqlWeather DataSource Integration Tests', () => {
                     cc_id: 76,
                 },
             });
-            const weather = new Weather(
-                25,
-                23.4,
-                12.2,
-                26.5,
-                22.1,
-                73.2,
-                'rainny day',
-            );
+            const weather = new Weather({
+                temp: 20.00, feelsLike: 20.00,
+                tempMin: 12.00, tempMax: 21.00,
+                humidity: 22.11, pressure: 32.23,
+                description: 'tempo seco'
+            });
             const result = await mySqlWeatherDataSource.saveWeather(weather, fakeCoordinate.id);
             expect(typeof result.id).toBe('string');
             expect(result.description).toBe(weather.description);
