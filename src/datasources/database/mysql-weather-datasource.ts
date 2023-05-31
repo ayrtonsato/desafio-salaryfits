@@ -1,15 +1,14 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-import { Weather as PrismaWeather } from '@prisma/client';
-import { IsoCodeCountry } from '../../entities/iso-code-country';
-import { CodeCountryRepository } from '../../repositories/code-country-repository';
-import { NotFoundError } from '../errors/not-found';
-import { CoordinatesFromDBRepository } from '../../repositories/coordinates-from-db-repository';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { Coordinates } from '../../entities/coordinates';
-import { WeatherFromDbRepository } from '../../repositories/weather-from-db-repository';
-import { Weather } from '../../entities/weather';
-import { InsertToDatabaseError } from '../errors/insert-to-database-error';
 import { Forecast } from '../../entities/forecast';
-import { latLonToCoordinates } from './helpers/converters';
+import { IsoCodeCountry } from '../../entities/iso-code-country';
+import { Weather } from '../../entities/weather';
+import { CodeCountryRepository } from '../../repositories/code-country-repository';
+import { CoordinatesFromDBRepository } from '../../repositories/coordinates-from-db-repository';
+import { WeatherFromDbRepository } from '../../repositories/weather-from-db-repository';
+import { InsertToDatabaseError } from '../errors/insert-to-database-error';
+import { NotFoundError } from '../errors/not-found';
+import { latLonToCoordinates, prismaWeatherToWeather } from './helpers/converters';
 
 export class MySqlWeatherDataSource implements
     CodeCountryRepository,
@@ -51,7 +50,7 @@ export class MySqlWeatherDataSource implements
         return new Forecast({
             id: result.id,
             coordinates: latLonToCoordinates(result.latLon) as Required<Coordinates>,
-            weathersForecast: result.
+            weathersForecast: result.weather.map(prismaWeatherToWeather)
         });
     }
 

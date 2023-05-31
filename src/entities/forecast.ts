@@ -3,13 +3,13 @@ import { Weather } from './weather';
 
 type ForecastDTO = {
     id?: string;
-    coordinates: Coordinates;
+    coordinates: Required<Coordinates>;
     weathersForecast: Weather[];
 };
 
 export class Forecast {
     public id?: string;
-    public coordinates: Coordinates;
+    public coordinates: Required<Coordinates>;
     public weathersForecast: Weather[];
 
     constructor(
