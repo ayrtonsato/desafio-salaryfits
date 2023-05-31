@@ -16,6 +16,30 @@ export class MySqlWeatherDataSource implements
     WeatherFromDbRepository {
     constructor(private readonly prisma: PrismaClient) { }
 
+    async fetchForecastById(id: string): Promise<Forecast> {
+        const result = await this.prisma.forecast.findFirst({
+            where: {
+                id
+            },
+            include: {
+                weather: true,
+                latLon: {
+                    include: {
+                        countryCode: true,
+                    },
+                },
+            },
+        });
+        if (!result) {
+            throw new NotFoundError('Forecast not found');
+        }
+
+        return new Forecast({
+            coordinates: latLonToCoordinates(result.latLon) as Required<Coordinates>,
+            weathersForecast: result.weather.map(prismaWeatherToWeather)
+        });
+    }
+
     async saveForecast(forecast: Forecast): Promise<Forecast> {
         const prismaWeather = forecast.weathersForecast.map((w: Weather) => {
             return {
