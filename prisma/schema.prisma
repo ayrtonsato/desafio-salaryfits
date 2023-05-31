@@ -25,8 +25,13 @@ model Weather {
   humidity Decimal @db.Decimal(8, 2)
   description String
 
-  latLon LatLon @relation(fields: [latLonId], references: [id])
-  latLonId Int @map("lat_lon_id")
+  datetime DateTime @default(now())
+
+  latLon LatLon? @relation(fields: [latLonId], references: [id])
+  latLonId Int? @map("lat_lon_id")
+
+  forecast Forecast? @relation(fields: [forecastId], references: [id])
+  forecastId String? @map("forecast_id")
 
   @@map("weather")
 }
@@ -44,5 +49,16 @@ model LatLon {
 
   weather Weather[]
 
+  forecast Forecast[]
+
   @@map("lat_lon")
+}
+
+model Forecast {
+  id String @id @default(uuid())
+
+  latLon LatLon @relation(fields: [latLonId], references: [id])
+  latLonId Int @map("lat_lon_id")
+
+  weather Weather[]
 }
