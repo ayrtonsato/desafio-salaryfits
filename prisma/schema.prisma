@@ -17,12 +17,12 @@ model CountryCode {
 
 model Weather {
   id String @id @default(uuid())
-  temp Decimal @db.Decimal(3,2)
-  feelsLike Decimal @db.Decimal(3,2) @map("feels_like")
-  tempMin Decimal @db.Decimal(3,2) @map("temp_min")
-  tempMax Decimal @db.Decimal(3,2) @map("temp_max")
-  pressure Decimal @db.Decimal(3,2)
-  humidity Decimal @db.Decimal(3,2)
+  temp Decimal @db.Decimal(8, 2)
+  feelsLike Decimal @db.Decimal(8, 2) @map("feels_like")
+  tempMin Decimal @db.Decimal(8, 2) @map("temp_min")
+  tempMax Decimal @db.Decimal(8, 2) @map("temp_max")
+  pressure Decimal @db.Decimal(8, 2)
+  humidity Decimal @db.Decimal(8, 2)
   description String
 
   latLon LatLon @relation(fields: [latLonId], references: [id])
