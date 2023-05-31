@@ -10,6 +10,49 @@ import { WeatherFromApiRepository } from '../../repositories/weather-from-api-re
 import { Weather } from '../../entities/weather';
 
 export class OpenWeatherDataSource implements CoordinatesFromAPIRepository, WeatherFromApiRepository {
+    async fetchForecast(lat: number, lon: number): Promise<Weather[]> {
+        try {
+            const { data } = await axiosInstance.get('/data/2.5/forecast', {
+                params: {
+                    lat: lat,
+                    lon: lon,
+                    units: 'metric',
+                    lang: 'pt_br',
+                    cnt: 24, // only 72 hours of forecast
+                }
+            });
+            if (!data) {
+                throw new NotFoundError('Forecast not found!');
+            }
+            const weathers: Weather[] = data.list.map((w: { dt: number, main: { temp: number; feels_like: number; temp_min: number; temp_max: number; pressure: number; humidity: number; }; weather: { description: string; }[]; }) => {
+                return new Weather({
+                    temp: w.main.temp,
+                    feelsLike: w.main.feels_like,
+                    tempMin: w.main.temp_min,
+                    tempMax: w.main.temp_max,
+                    pressure: w.main.pressure,
+                    humidity: w.main.humidity,
+                    description: w.weather[0].description,
+                    datetime: new Date(w.dt),
+                });
+            });
+            return weathers;
+        } catch (err) {
+            if (axios.isAxiosError(err)) {
+                const status = err?.response?.status || 0;
+                if (status === 401) {
+                    throw new ApiKeyError();
+                }
+                if (status === 400) {
+                    throw new NotFoundError(err.response?.data.message);
+                }
+                throw new UnexpectedError('');
+            } else {
+                throw new UnexpectedError('');
+            }
+        }
+    }
+
     async fetchWeatherNow(lat: number, lon: number): Promise<Weather> {
         try {
             const { data } = await axiosInstance.get('/data/2.5/weather', {
