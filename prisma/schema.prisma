@@ -61,4 +61,6 @@ model Forecast {
   latLonId Int @map("lat_lon_id")
 
   weather Weather[]
+
+  @@map("forecast")
 }

@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client';
+import { Weather as PrismaWeather } from '@prisma/client';
 import { IsoCodeCountry } from '../../entities/iso-code-country';
 import { CodeCountryRepository } from '../../repositories/code-country-repository';
 import { NotFoundError } from '../errors/not-found';
@@ -7,12 +8,52 @@ import { Coordinates } from '../../entities/coordinates';
 import { WeatherFromDbRepository } from '../../repositories/weather-from-db-repository';
 import { Weather } from '../../entities/weather';
 import { InsertToDatabaseError } from '../errors/insert-to-database-error';
+import { Forecast } from '../../entities/forecast';
+import { latLonToCoordinates } from './helpers/converters';
 
 export class MySqlWeatherDataSource implements
     CodeCountryRepository,
     CoordinatesFromDBRepository,
     WeatherFromDbRepository {
     constructor(private readonly prisma: PrismaClient) { }
+
+    async saveForecast(forecast: Forecast): Promise<Forecast> {
+        const prismaWeather = forecast.weathersForecast.map((w: Weather) => {
+            return {
+                temp: new Prisma.Decimal(w.temp),
+                feelsLike: new Prisma.Decimal(w.feelsLike),
+                tempMin: new Prisma.Decimal(w.tempMin),
+                tempMax: new Prisma.Decimal(w.tempMax),
+                pressure: new Prisma.Decimal(w.pressure),
+                humidity: new Prisma.Decimal(w.humidity),
+                description: w.description,
+                datetime: w.datetime,
+            };
+        });
+        const result = await this.prisma.forecast.create({
+            data: {
+                latLonId: forecast.coordinates.id,
+                weather: {
+                    createMany: {
+                        data: prismaWeather,
+                    }
+                },
+            },
+            include: {
+                latLon: {
+                    include: {
+                        countryCode: true,
+                    }
+                },
+                weather: true,
+            }
+        });
+        return new Forecast({
+            id: result.id,
+            coordinates: latLonToCoordinates(result.latLon) as Required<Coordinates>,
+            weathersForecast: result.
+        });
+    }
 
     async fetchById(id: string): Promise<Weather> {
         const result = await this.prisma.weather.findFirst({
