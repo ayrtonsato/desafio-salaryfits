@@ -43,6 +43,16 @@ O arquivo `.env` deve conter as seguintes variáveis de ambiente:
 - `API_KEY` -> Chave gerada pela open weathers
 - `DATABASE_URL` -> String de conexão com o banco de dados, ex: `mysql://root:pass@localhost:3306/weather`
 
+Executar o comando `npm install`.
+
+Executar o comando `npx prisma migrate deploy` ou `npm run deploy:db`.
+
+Executar o comando `npx prisma db seed` ou `npm run deploy:seed`.
+
+Executar o comando `npm run build && dist/server.js` para rodar a aplicação.
+
+Você pode executar o comando `npm run dev` para rodar a aplicação também.
+
 # Endpoints da API
 
 ## Weather Collection [/weather]
