@@ -15,6 +15,7 @@ Nesse projeto, a API escolhida para receber as chamadas foi a API da OpenWeather
 ### Utilizando docker
 
 Para rodar este projeto utilizando docker, é necessário criar dois arquivos .env (`dev.env` e `mysql.env`) dentro do diretório `env`.
+
 O arquivo `dev.env` deve conter as seguintes variáveis de ambiente:
 
 - `WEB_PORT` -> Indica a porta a ser utilizada pela aplicação web
@@ -26,12 +27,16 @@ O arquivo `mysql.env` deve conter as seguintes variáveis de ambiente:
 - `MYSQL_ROOT_PASSWORD` -> senha a ser conectado com o banco
 - `MYSQL_DATABASE` -> nome do banco de dados que deve ser igual ao mencionado na string de conexão
 
-Executar o comando `npm install`
-Executar o comando `docker compose -f docker-compose-dev.yml --env-file env/dev.env up`
+Executar o comando `npm install`.
+
+Executar o comando `docker compose -f docker-compose-dev.yml --env-file env/dev.env up`.
+
+Caso dê algum erro no prisma, talvez seja necessário instalar um pacote com o comando `sudo apt install build-essential`.
 
 ### Sem Docker
 
 Para rodar este projeto sem docker, é necessário criar o arquivo `.env` no diretório raiz deste projeto.
+
 O arquivo `.env` deve conter as seguintes variáveis de ambiente:
 
 - `WEB_PORT` -> Indica a porta a ser utilizada pela aplicação web
